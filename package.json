@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "git": "https://github.com/coatilabs/keystone-fs-image-storage-adapter",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/coatilabs/keystone-fs-image-storage-adapter.git"
+  },
+  "git": "",
   "author": "coatilabs <hola@coatilabs.com>",
   "license": "MIT License",
   "dependencies": {

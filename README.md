@@ -1,11 +1,6 @@
 # Jimp based image storage adapter for KeystoneJS
 
-Keystone Storage Adapter to help you to manage an image document with [Jimp](https://github.com/oliver-moran/jimp) tool
-
-
-# S3-based 
-
-This adapter is designed to manipulate images after upload with Jimp tool in KeystoneJS using the storage API.
+This adapter is designed to manipulate images after upload with [Jimp](https://github.com/oliver-moran/jimp) tool in KeystoneJS using the storage API.
 
 Tested in Node.js 6.12.2
 
