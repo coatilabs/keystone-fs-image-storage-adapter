@@ -1,5 +1,5 @@
 {
-  "name": "keystone-fs-image-storage-adapter",
+  "name": "@coatilabs/keystone-fs-image-storage-adapter",
   "version": "1.0.0",
   "description": "Storage Adapter to help you to manage an Image document with Jimp tool",
   "main": "index.js",
