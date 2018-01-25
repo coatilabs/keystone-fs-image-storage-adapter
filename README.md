@@ -35,7 +35,7 @@ File.add({
 
 ### Options
 
-The adapter requires an additional `fs` field added to the storage options. it accepts the following values:
+The adapter requires an additional `imagefs` field added to the storage options. it accepts the following values:
 
 - **path**: _(string; required)_ Path the files will be stored at on disk
 

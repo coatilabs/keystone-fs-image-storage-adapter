@@ -49,7 +49,11 @@ function FSImageAdapter (options, schema) {
     debug('Initialising FSImageAdapter with options', this.options);
 
     this.options.generateFilename = ensureCallback(this.options.generateFilename);
-    this.manageImage = ensureCallback(this.options.manageImage);
+
+    if (typeof this.options.manageImage !== "function") 
+        throw Error('manageImage must be a function');
+    this.manageImage = this.options.manageImage;
+
     ensurePath(this.options.path);
 }
 
@@ -104,9 +108,9 @@ FSImageAdapter.prototype.uploadFile = function (file, callback) {
         fsOptions.clobber = options.whenExists === 'overwrite';
 
         Jimp.read(file.path, function (err, workingfile) {
-            if (err) return debug(err) && callback(err);
+            if (err) return callback(err);
             self.manageImage(workingfile, function(err, filetosave) {
-                if (err) return debug(err) && callback(err);
+                if (err) return callback(err);
                 filetosave.write(file.path, function(){
                     fs.move(file.path, uploadPath, fsOptions, function (err) {
                         // TODO: Chmod the file.
