@@ -8,8 +8,7 @@ var nameFunctions = require('keystone-storage-namefunctions');
 var ensureCallback = require('keystone-storage-namefunctions/ensureCallback');
 var prototypeMethods = require('keystone-storage-namefunctions/prototypeMethods');
 
-//var debug = require('debug')('coatilabs:storage:adapter:imagefs');
-var debug = console.log;
+var debug = require('debug')('coatilabs:storage:adapter:imagefs');
 
 const supported_mimes = ['image/png', 'image/tiff', 'image/jpeg', 'image/jgd', 'image/bmp', 'image/x-ms-bmp', 'image/gif'];
 
@@ -114,18 +113,14 @@ FSImageAdapter.prototype.uploadFile = function (file, callback) {
         fsOptions.clobber = options.whenExists === 'overwrite';
 
         self.addExtension(file, function(err, file) {
-            console.error(err)
             if (err) return callback(err);
             
             if (supported_mimes.includes(file.mimetype)) {
-                console.log(file)
                             
                 Jimp.read(file.path, function (err, workingfile) {
-                    console.error(err)
                     if (err) return callback(err);
                                 
                     self.manageImage(workingfile, function(err, filetosave) {
-                        console.error(err)
                         if (err) return callback(err);
 
                         filetosave.write(file.path, function(){
