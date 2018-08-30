@@ -1,17 +1,17 @@
 {
   "name": "@coatilabs/keystone-fs-image-storage-adapter",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Storage Adapter to help you to manage an Image document with Jimp tool",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/coatilabs/keystone-fs-image-storage-adapter.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coatilabs/keystone-fs-image-storage-adapter.git"
   },
   "author": "coatilabs <hola@coatilabs.com>",
-  "license": "MIT License",
+  "license": "MIT",
   "dependencies": {
     "fs-extra": "^5.0.0",
     "jimp": "^0.2.28",

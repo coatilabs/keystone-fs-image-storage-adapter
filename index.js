@@ -8,7 +8,11 @@ var nameFunctions = require('keystone-storage-namefunctions');
 var ensureCallback = require('keystone-storage-namefunctions/ensureCallback');
 var prototypeMethods = require('keystone-storage-namefunctions/prototypeMethods');
 
-var debug = require('debug')('coatilabs:storage:adapter:imagefs');
+//var debug = require('debug')('coatilabs:storage:adapter:imagefs');
+var debug = console.log;
+
+const supported_mimes = ['image/png', 'image/tiff', 'image/jpeg', 'image/jgd', 'image/bmp', 'image/x-ms-bmp', 'image/gif'];
+
 
 
 var DEFAULT_OPTIONS = {
@@ -101,37 +105,81 @@ FSImageAdapter.prototype.uploadFile = function (file, callback) {
     var options = self.options;
     self.getFilename(file, function (err, filename) {
         if (err) return callback(err);
-        filename = sanitize(filename);
+
+        let ext = file.originalname.split('.');
+        filename = sanitize(filename + '.' + ext[ext.length - 1]);
         debug('Uploading file with filename: %s', filename);
         var uploadPath = path.resolve(options.path, filename);
         var fsOptions = {};
         fsOptions.clobber = options.whenExists === 'overwrite';
 
-        Jimp.read(file.path, function (err, workingfile) {
+        self.addExtension(file, function(err, file) {
+            console.error(err)
             if (err) return callback(err);
-            self.manageImage(workingfile, function(err, filetosave) {
-                if (err) return callback(err);
-                filetosave.write(file.path, function(){
-                    fs.move(file.path, uploadPath, fsOptions, function (err) {
-                        // TODO: Chmod the file.
-                        var data = {
-                            filename: filename,
-                            size: file.size,
-                            mimetype: file.mimetype,
-                            path: options.path,
-                            originalname: file.originalname,
-                        };
-                        debug('Uploaded file, returning data', data);
-                        callback(null, data);
+            
+            if (supported_mimes.includes(file.mimetype)) {
+                console.log(file)
+                            
+                Jimp.read(file.path, function (err, workingfile) {
+                    console.error(err)
+                    if (err) return callback(err);
+                                
+                    self.manageImage(workingfile, function(err, filetosave) {
+                        console.error(err)
+                        if (err) return callback(err);
+
+                        filetosave.write(file.path, function(){
+                            fs.move(file.path, uploadPath, fsOptions, function (err) {
+                                // TODO: Chmod the file.
+                                var data = {
+                                    filename: filename,
+                                    size: file.size,
+                                    mimetype: file.mimetype,
+                                    path: options.path,
+                                    originalname: file.originalname,
+                                };
+                                debug('Uploaded file, returning data', data);
+                                callback(null, data);
+                            });
+                        });
                     });
+                });            
+            } else {
+                fs.move(file.path, uploadPath, fsOptions, function (err) {
+                    // TODO: Chmod the file.
+                    var data = {
+                        filename: filename,
+                        size: file.size,
+                        mimetype: file.mimetype,
+                        path: options.path,
+                        originalname: file.originalname,
+                    };
+                    debug('Uploaded file, returning data', data);
+                    callback(null, data);
                 });
-            });
-        });
+            }
+        })
+
 
 
     
     });
 };
+
+FSImageAdapter.prototype.addExtension = function (file, callback) {
+    if(path.extname(file.path) == '') {
+        let ext = file.originalname.split('.');
+        ext = ext[ext.length - 1];
+        fs.rename(file.path, file.path + '.' + ext, function (err) {
+            if (err) return callback(err, file);
+            file.path = file.path + '.' + ext;
+            file.filename = file.filename + '.' + ext;
+            callback(null, file);
+        });
+    } else {
+        return callback(null, file);
+    }
+}
 
 FSImageAdapter.prototype.removeFile = function (file, callback) {
     debug('Removing file', file);
