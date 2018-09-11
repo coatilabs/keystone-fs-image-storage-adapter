@@ -104,9 +104,7 @@ FSImageAdapter.prototype.uploadFile = function (file, callback) {
     var options = self.options;
     self.getFilename(file, function (err, filename) {
         if (err) return callback(err);
-
-        let ext = file.originalname.split('.');
-        filename = sanitize(filename + '.' + ext[ext.length - 1]);
+        filename = sanitize(filename);
         debug('Uploading file with filename: %s', filename);
         var uploadPath = path.resolve(options.path, filename);
         var fsOptions = {};

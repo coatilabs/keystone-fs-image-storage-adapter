@@ -1,6 +1,6 @@
 {
   "name": "@coatilabs/keystone-fs-image-storage-adapter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Storage Adapter to help you to manage an Image document with Jimp tool",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "coatilabs <hola@coatilabs.com>",
   "license": "MIT",
   "dependencies": {
+    "debug": "^4.0.0",
     "fs-extra": "^5.0.0",
     "jimp": "^0.2.28",
     "keystone-storage-namefunctions": "^1.1.1",
